@@ -4,31 +4,25 @@ import { marcasAutoclave } from './dados/autoclaves.mjs'
 import { marcaLavadora } from './dados/lavadoraTermodesinfectoras.mjs'
 
 const marcaTemMenosItens = (resultados, marca, quantidade) => {
-  return resultados.filter(item => item.split(' ')[0] === marca).length < quantidade
+  return resultados.filter(item => item.split(', ')[0] === marca).length < quantidade
 }
 
-const maisProximoDe90 = (resultado, resultados, marca) => {
-  const contPorcentage = parseFloat(resultado.split(' ')[4])
-  const distAtual = Math.abs(contPorcentage - 90)
-
-  return resultados
-    .filter(item => item.split(' ')[0] === marca)
-    .some(item => {
-      const porcentage = parseFloat(item.split(' ')[4])
-      return Math.abs(porcentage - 90) > distAtual
-    })
+const obterMenorValor = (resultados, marca) => {
+  const itemsDaMarca = resultados.filter(item => item.split(', ')[0] === marca)
+  return itemsDaMarca.reduce((a, b) => parseFloat(a.split(', ')[2]) < parseFloat(b.split(', ')[2]) ? a : b)
 }
 
 const atualizarResultados = (resultados, resultado, marca, maxItens) => {
   if (marcaTemMenosItens(resultados, marca, maxItens)) {
     resultados.push(resultado)
-  } else if (maisProximoDe90(resultado, resultados, marca)) {
-    const itemsDaMarca = resultados.filter(item => item.split(' ')[0] === marca)
-    const indexToRemove = resultados.findIndex(item => item === itemsDaMarca.reduce((a, b) => Math.abs(parseFloat(a.split(' ')[4]) - 90) > Math.abs(parseFloat(b.split(' ')[4]) - 90) ? a : b))
-    resultados.splice(indexToRemove, 1, resultado)
+  } else {
+    const menorValor = obterMenorValor(resultados, marca)
+    const menorValorIndex = resultados.indexOf(menorValor)
+    if (parseFloat(resultado.split(', ')[2]) > parseFloat(menorValor.split(', ')[2])) {
+      resultados.splice(menorValorIndex, 1, resultado)
+    }
   }
 }
-
 
 const marcasAutoclaves = (
   estimativaDeVolumeTotalDiarioLitros,
