@@ -1,0 +1,171 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Calculadora de Esterilização",
+    "description": "Esta API tem como objetivo devolver uma lista de equipamentos de esterilização hospitalar (autoclaves e lavadoras)",
+    "contact": {
+      "email": "kairomilhomem@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://back-cme.onrender.com/",
+      "description": "API em produção"
+    }
+  ],
+  "paths": {
+    "/produto/": {
+      "get": {
+        "summary": "Calcular",
+        "description": "Esta rota é responsável pelo cálculo",
+        "tags": ["Calculadora"],
+        "parameters": [
+          {
+            "name": "salaCirugia",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Número de salas de cirurgia"
+          },
+          {
+            "name": "cirugiasPorSala",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Número de cirurgias por sala"
+          },
+          {
+            "name": "processamentoDeTecidos",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Indica se há processamento de tecidos"
+          },
+          {
+            "name": "dia",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Número de dias de operação"
+          },
+          {
+            "name": "cme",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Número de CMEs"
+          },
+          {
+            "name": "leitoUti",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Número de leitos UTI"
+          },
+          {
+            "name": "leitoRpa",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Número de leitos RPA"
+          },
+          {
+            "name": "totalDeAutoclaves",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Total de autoclaves"
+          },
+          {
+            "name": "totalDeLavadorasTermo",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Total de lavadoras termo-desinfectoras"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK. Cálculo realizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/calculo"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          }
+        }
+      }
+    }
+  },
+
+  "components": {
+    "schemas": {
+      "calculo": {
+        "type": "object",
+        "properties": {
+          "salaCirurgia": {
+            "type": "integer",
+            "example": 12
+          },
+          "cirurgiasPorSala": {
+            "type": "integer",
+            "example": 6
+          },
+          "processamentoDeTecidos": {
+            "type": "boolean",
+            "example": true
+          },
+          "dia": {
+            "type": "integer",
+            "example": 8
+          },
+          "cme": {
+            "type": "integer",
+            "example": 12
+          },
+          "leitoUti": {
+            "type": "integer",
+            "example": 30
+          },
+          "leitoRpa": {
+            "type": "integer",
+            "example": 149
+          },
+          "totalDeAutoclaves": {
+            "type": "integer",
+            "example": 3
+          },
+          "totalDeLavadorasTermo": {
+            "type": "integer",
+            "example": 2
+          }
+        }
+      }
+    }
+  }
+}

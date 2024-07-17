@@ -1,5 +1,7 @@
 import express from 'express'
 import cors from 'cors'
+import swaggerUI from 'swagger-ui-express'
+import swaggerDocs from './swagger.json' assert { type: 'json' };
 
 import { calcularValores } from './src/calculos/calcularValores.mjs'
 
@@ -8,6 +10,7 @@ const PORT = process.env.PORT || 8080
 const app = express()
 app.use(express.json())
 app.use(cors())
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs))
 
 
 /*[Rota para retornar produto]*/
